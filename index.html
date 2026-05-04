@@ -230,7 +230,7 @@
                     icon: Home,
                     category: 'Fairness',
                     question: "It's not fair that some employees work from home while others have to come in.",
-                    answer: "Fairness isn't about identical treatment — it's about matching flexibility to the role. Just like we pay different salaries for different responsibilities, flexibility reflects the nature of the job.",
+                    answer: "Fairness isn't about identical treatment - it's about matching flexibility to the role. Just like we pay different salaries for different responsibilities, flexibility reflects the nature of the job.",
                     anchor: "Role-based flexibility is fair. One-size-fits-all isn't.",
                     color: 'from-blue-500 to-cyan-500'
                 },
@@ -239,34 +239,45 @@
                     icon: TrendingUp,
                     category: 'Productivity',
                     question: "People are more productive in the office.",
-                    answer: "The data doesn't support that. Stanford and Gallup studies show remote workers are equally or more productive. Commuting doesn't add value — it subtracts time and energy.",
+                    answer: "The data doesn't support that. Stanford and Gallup studies show remote workers are equally or more productive. Commuting doesn't add value - it subtracts time and energy.",
                     anchor: "Productivity comes from focus, not postcode.",
-                    color: 'from-green-500 to-emerald-500'
+                    color: 'from-green-500 to-emerald-500',
+                    sources: [
+                        { label: 'Stanford / Nature (Bloom, 2024)', url: 'https://www.nature.com/articles/d41586-024-01763-5' },
+                        { label: 'Stanford SIEPR study', url: 'https://siepr.stanford.edu/news/hybrid-work-win-win-win-companies-workers-study-finds' },
+                        { label: 'Gallup: Remote Work', url: 'https://www.gallup.com/topic/remote-work.aspx' }
+                    ]
                 },
                 {
                     id: 'culture',
                     icon: Users,
                     category: 'Culture',
                     question: "We need people in the office to build culture.",
-                    answer: "Culture isn't built by proximity — it's built on trust, values, and clear communication. Companies like GitLab, Automattic, and Zapier have thriving cultures without mandatory office time.",
+                    answer: "Culture isn't built by proximity - it's built on trust, values, and clear communication. Companies like GitLab, Automattic, and Zapier have thriving cultures without mandatory office time.",
                     anchor: "Culture is built by how we work, not where we work.",
-                    color: 'from-purple-500 to-pink-500'
+                    color: 'from-purple-500 to-pink-500',
+                    sources: [
+                        { label: 'GitLab All-Remote Handbook', url: 'https://handbook.gitlab.com/handbook/company/culture/all-remote/' }
+                    ]
                 },
                 {
                     id: 'ceo',
                     icon: Briefcase,
                     category: 'CEO Preference',
-                    question: "I just prefer everyone in the office — it's better for the company.",
-                    answer: "Leadership isn't about personal preference. It's about designing for what works best for the organisation. The data consistently supports flexible models — not blanket mandates.",
+                    question: "I just prefer everyone in the office - it's better for the company.",
+                    answer: "Leadership isn't about personal preference. It's about designing for what works best for the organisation. The data consistently supports flexible models - not blanket mandates.",
                     anchor: "Good leadership separates preference from strategy.",
-                    color: 'from-orange-500 to-red-500'
+                    color: 'from-orange-500 to-red-500',
+                    sources: [
+                        { label: 'Stanford: Hybrid is a win-win-win', url: 'https://news.stanford.edu/stories/2024/06/hybrid-work-is-a-win-win-win-for-companies-workers' }
+                    ]
                 },
                 {
                     id: 'collaboration',
                     icon: Coffee,
                     category: 'Collaboration & Innovation',
                     question: "We collaborate better face to face.",
-                    answer: "In-person time works best when it's intentional — not forced. Hybrid models that use office time for deep collaboration outperform rigid attendance rules.",
+                    answer: "In-person time works best when it's intentional - not forced. Hybrid models that use office time for deep collaboration outperform rigid attendance rules.",
                     anchor: "Purpose beats presence.",
                     color: 'from-amber-500 to-yellow-500'
                 },
@@ -283,17 +294,22 @@
                     id: 'trends',
                     icon: TrendingUp,
                     category: 'Trends',
-                    question: "Big companies are bringing people back — we should too.",
-                    answer: "And many world-class companies — GitLab, Atlassian, Spotify, Airbnb, Dropbox — are thriving with flexible and remote-first models. Following trends isn't strategy. Data and culture are.",
+                    question: "Big companies are bringing people back - we should too.",
+                    answer: "And many world-class companies - GitLab, Atlassian, Spotify, Airbnb, Dropbox - are thriving with flexible and remote-first models. Following trends isn't strategy. Data and culture are.",
                     anchor: "Don't follow trends. Follow what works.",
-                    color: 'from-indigo-500 to-purple-500'
+                    color: 'from-indigo-500 to-purple-500',
+                    sources: [
+                        { label: 'GitLab All-Remote Handbook', url: 'https://handbook.gitlab.com/handbook/company/culture/all-remote/' },
+                        { label: 'Atlassian Team Anywhere', url: 'https://www.atlassian.com/solutions/distributed' },
+                        { label: 'Atlassian: 1,000 Days of Distributed', url: 'https://www.atlassian.com/blog/distributed-work/distributed-work-report' }
+                    ]
                 },
                 {
                     id: 'sunk-cost',
                     icon: DollarSign,
                     category: 'Sunk Cost',
-                    question: "We're already paying for office space — we need to get our money's worth.",
-                    answer: "That's the sunk cost fallacy. The lease is paid whether desks are full or empty. Forcing people into the office doesn't recoup costs — it just adds new ones: lower productivity, higher turnover, and burnt-out talent. The question isn't 'how do we use the space?' — it's 'how do we use our people best?'",
+                    question: "We're already paying for office space - we need to get our money's worth.",
+                    answer: "That's the sunk cost fallacy. The lease is paid whether desks are full or empty. Forcing people into the office doesn't recoup costs - it just adds new ones: lower productivity, higher turnover, and burnt-out talent. The question isn't 'how do we use the space?' - it's 'how do we use our people best?'",
                     anchor: "Throwing good money after bad doesn't make the bad money good.",
                     color: 'from-teal-500 to-cyan-500'
                 }
@@ -445,6 +461,23 @@
                                                     ⚓ {currentCard.anchor}
                                                 </p>
                                             </div>
+                                            {currentCard.sources && currentCard.sources.length > 0 && (
+                                                <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-x-3 gap-y-1">
+                                                    <span className="text-slate-500 text-xs md:text-sm font-semibold">Sources:</span>
+                                                    {currentCard.sources.map((source, i) => (
+                                                        <a
+                                                            key={i}
+                                                            href={source.url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                            className="text-xs md:text-sm text-blue-600 hover:text-blue-800 underline"
+                                                        >
+                                                            {source.label}
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="text-slate-400 text-xs md:text-sm flex items-center gap-2 mt-4 flex-shrink-0">
                                             <span>Click to flip back</span>
