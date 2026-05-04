@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import type { ComponentType, SVGProps } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import type { ComponentType, SVGProps, TouchEvent as ReactTouchEvent } from 'react';
 
 type IconProps = { className?: string };
 type Icon = ComponentType<IconProps>;
@@ -218,32 +218,75 @@ export default function App() {
     }
   }, [buttonPress]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setIsFlipped(false);
     setSlideDirection('slide-in-right');
     setButtonPress('next');
     setCurrentIndex((prev) => (prev + 1) % cards.length);
-  };
+  }, []);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setIsFlipped(false);
     setSlideDirection('slide-in-left');
     setButtonPress('prev');
     setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
-  };
+  }, []);
 
-  const handleShuffle = () => {
+  const handleShuffle = useCallback(() => {
     setIsFlipped(false);
     setSlideDirection('slide-in-right');
     setButtonPress('shuffle');
-    const randomIndex = Math.floor(Math.random() * cards.length);
-    setCurrentIndex(randomIndex);
-  };
+    setCurrentIndex((prev) => {
+      if (cards.length <= 1) return prev;
+      let next = prev;
+      while (next === prev) next = Math.floor(Math.random() * cards.length);
+      return next;
+    });
+  }, []);
+
+  const lastSwipeTimeRef = useRef(0);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
+  const minSwipeDistance = 50;
+  const swipeClickGuardMs = 300;
 
   const handleFlip = () => {
-    setIsFlipped(!isFlipped);
+    if (Date.now() - lastSwipeTimeRef.current < swipeClickGuardMs) return;
+    setIsFlipped((prev) => !prev);
     setFlipCount((prev) => prev + 1);
   };
+
+  const onTouchStart = (e: ReactTouchEvent) => {
+    touchEndXRef.current = null;
+    touchStartXRef.current = e.targetTouches[0]!.clientX;
+  };
+
+  const onTouchMove = (e: ReactTouchEvent) => {
+    touchEndXRef.current = e.targetTouches[0]!.clientX;
+  };
+
+  const onTouchEnd = () => {
+    const start = touchStartXRef.current;
+    const end = touchEndXRef.current;
+    if (start === null || end === null) return;
+    const distance = start - end;
+    if (distance > minSwipeDistance) {
+      lastSwipeTimeRef.current = Date.now();
+      handleNext();
+    } else if (distance < -minSwipeDistance) {
+      lastSwipeTimeRef.current = Date.now();
+      handlePrev();
+    }
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') handlePrev();
+      else if (e.key === 'ArrowRight') handleNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [handlePrev, handleNext]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
@@ -275,8 +318,14 @@ export default function App() {
           )}
         </div>
 
-        <div className="perspective-1000 mb-4 md:mb-6">
+        <div
+          className="perspective-1000 mb-4 md:mb-6 select-none touch-pan-y"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <div
+            key={currentIndex}
             onClick={handleFlip}
             className={`relative w-full h-[500px] md:h-[450px] cursor-pointer transition-transform duration-500 transform-style-3d ${slideDirection}`}
             style={{
